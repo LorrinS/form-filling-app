@@ -5,7 +5,7 @@ from form_filler7 import fill_pdf_fields
 import tempfile
 import os
 
-st.title("📄 AI-Powered Form Filler (Ollama Enabled)")
+st.title("Form Filler")
 
 filled_file = st.file_uploader("Step 1: Upload filled PDF", type="pdf")
 blank_file = st.file_uploader("Step 2: Upload blank PDF", type="pdf")
@@ -18,15 +18,15 @@ if filled_file and blank_file:
         f2.write(blank_file.read())
         blank_path = f2.name
 
-    st.write("🔍 Extracting AI-labeled fields from filled form...")
+    st.write("Getting fields from filled form...")
     extracted = extract_fields_from_filled_pdf(filled_path)
     st.json(extracted)
 
-    st.write("🤖 Matching to blank form...")
+    st.write("Matching to blank form...")
     matched = match_filled_to_blank_fields(extracted, blank_path)
     st.json(matched)
 
-    if st.button("🖨️ Fill and Download PDF"):
+    if st.button("Fill and Download PDF"):
         output_path = os.path.join(tempfile.gettempdir(), "ai_filled_form.pdf")
         fill_pdf_fields(blank_path, output_path, matched)
         with open(output_path, "rb") as f:
