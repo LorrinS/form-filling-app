@@ -4,24 +4,6 @@ from langchain.prompts import ChatPromptTemplate
 
 llm = OllamaLLM(model="llama3.1:8b")
 
-# def generate_label(text, value):
-#     prompt = ChatPromptTemplate.from_template(
-#         "Given the following value from a PDF form: '{value}', "
-#         "and nearby text: '{text}', return a short label like 'email', 'full name', or 'move-in date'. "
-#         "Avoid using company info or template values."
-#     )
-#     return llm.invoke(prompt.format(value=value, text=text)).strip().lower()
-
-# def generate_label(text, value):
-#     prompt = ChatPromptTemplate.from_template(
-#         "You are labeling a field in a PDF form.\n\n"
-#         "Given the field value: '{value}'\n"
-#         "And the nearby text: '{text}'\n\n"
-#         "Return ONLY the most appropriate short label for this field, such as 'email', 'full name', 'move-in date', etc.\n"
-#         "Avoid explaining your reasoning. Do not return multiple labels. Just reply with the label only, nothing else."
-#     )
-#     return llm.invoke(prompt.format(value=value, text=text)).strip().lower()
-
 def generate_label(text, value):
     prompt = ChatPromptTemplate.from_template(
         "You are labeling a field from a filled-out PDF form. Your job is to identify **only the information entered by the client/user filling the form**, and return a short semantic label for it.\n\n"
