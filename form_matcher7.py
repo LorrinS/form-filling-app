@@ -1,283 +1,3 @@
-# # # # from difflib import SequenceMatcher
-# # # # import fitz
-
-# # # # def similarity(a, b):
-# # # #     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
-
-# # # # def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
-# # # #     doc = fitz.open(blank_pdf_path)
-# # # #     blank_fields = []
-# # # #     for page_num, page in enumerate(doc):
-# # # #         for w in page.widgets():
-# # # #             label = page.get_textbox(w.rect + (-70, -70, 70, 70)).strip()
-# # # #             blank_fields.append({
-# # # #                 "field_name": w.field_name,
-# # # #                 "label": label,
-# # # #                 "page": page_num
-# # # #             })
-
-# # # #     matched = {}
-# # # #     for bf in blank_fields:
-# # # #         best_score = 0
-# # # #         best_value = None
-# # # #         for ff in filled_fields:
-# # # #             score = similarity(bf["label"], ff["label"])
-# # # #             if score > best_score:
-# # # #                 best_score = score
-# # # #                 best_value = ff["value"]
-# # # #         if best_score > 0.35:
-# # # #             matched[bf["field_name"]] = best_value
-# # # #             print(f"Matching '{bf['label']}' to '{ff['label']}' → score: {score}")
-# # # #     return matched
-
-# # # from difflib import SequenceMatcher
-# # # import fitz
-
-# # # def similarity(a, b):
-# # #     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
-
-# # # # def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
-# # # #     doc = fitz.open(blank_pdf_path)
-# # # #     blank_fields = []
-
-# # # #     # Step 1: Extract all fields in the blank form
-# # # #     for page_num, page in enumerate(doc):
-# # # #         for w in page.widgets():
-# # # #             label = page.get_textbox(w.rect + (-70, -70, 70, 70)).strip()
-# # # #             blank_fields.append({
-# # # #                 "field_name": w.field_name,
-# # # #                 "label": label,
-# # # #                 "page": page_num
-# # # #             })
-
-# # # #     # Step 2: Match each blank field to extracted field
-# # # #     matched = {}
-# # # #     for bf in blank_fields:
-# # # #         best_score = 0
-# # # #         best_value = ""
-# # # #         for ff in filled_fields:
-# # # #             score = similarity(bf["label"], ff["label"])
-# # # #             if score > best_score:
-# # # #                 best_score = score
-# # # #                 best_value = ff["value"]
-# # # #         matched[bf["field_name"]] = best_value if best_score > 0.35 else ""
-
-# # # #     return matched
-
-# # # def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
-# # #     doc = fitz.open(blank_pdf_path)
-# # #     blank_fields = []
-
-# # #     for page_num, page in enumerate(doc):
-# # #         for w in page.widgets():
-# # #             label = page.get_textbox(w.rect + (-70, -70, 70, 70)).strip()
-# # #             blank_fields.append({
-# # #                 "field_name": w.field_name,
-# # #                 "label": label,
-# # #                 "page": page_num
-# # #             })
-
-# # #     matched = {}
-# # #     used = set()
-
-# # #     for bf in blank_fields:
-# # #         best_score = 0
-# # #         best_value = ""
-# # #         best_idx = -1
-
-# # #         for i, ff in enumerate(filled_fields):
-# # #             if i in used:
-# # #                 continue
-# # #             score = similarity(bf["label"], ff["label"])
-# # #             if score > best_score:
-# # #                 best_score = score
-# # #                 best_value = ff["value"]
-# # #                 best_idx = i
-
-# # #         if best_score > 0.35:
-# # #             matched[bf["field_name"]] = best_value
-# # #             used.add(best_idx)
-# # #         else:
-# # #             matched[bf["field_name"]] = ""
-
-# # #     return matched
-
-# # from difflib import SequenceMatcher
-# # import fitz
-
-# # def similarity(a, b):
-# #     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
-
-# # def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
-# #     doc = fitz.open(blank_pdf_path)
-# #     blank_fields = []
-
-# #     for page_num, page in enumerate(doc):
-# #         for w in page.widgets():
-# #             label = page.get_textbox(w.rect + (-70, -70, 70, 70)).strip()
-# #             blank_fields.append({
-# #                 "field_name": w.field_name,
-# #                 "label": label,
-# #                 "page": page_num
-# #             })
-
-# #     matched = {}
-# #     used = set()
-
-# #     print("🎯 Matching process:")
-# #     for bf in blank_fields:
-# #         best_score = 0
-# #         best_value = ""
-# #         best_idx = -1
-# #         best_filled_label = ""
-
-# #         for i, ff in enumerate(filled_fields):
-# #             if i in used:
-# #                 continue
-# #             score = similarity(bf["label"], ff["label"])
-# #             if score > best_score:
-# #                 best_score = score
-# #                 best_value = ff["value"]
-# #                 best_idx = i
-# #                 best_filled_label = ff["label"]
-
-# #         # Lowered threshold from 0.35 to 0.2
-# #         threshold = 0.2
-# #         if best_score > threshold:
-# #             matched[bf["field_name"]] = best_value
-# #             used.add(best_idx)
-# #             print(f"✅ {bf['field_name']}: '{bf['label']}' ← '{best_filled_label}' (score: {best_score:.2f})")
-# #         else:
-# #             matched[bf["field_name"]] = ""
-# #             print(f"❌ {bf['field_name']}: '{bf['label']}' (no match, best: {best_score:.2f})")
-
-# #     return matched
-
-# from difflib import SequenceMatcher
-# import fitz
-# from langchain_ollama import OllamaLLM
-# from langchain.prompts import ChatPromptTemplate
-
-# llm = OllamaLLM(model="llama3.1:8b")
-
-# def similarity(a, b):
-#     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
-
-# def generate_blank_field_label(text, field_name):
-#     """Generate semantic labels for blank form fields using AI"""
-#     prompt = ChatPromptTemplate.from_template(
-#         "You are analyzing a blank PDF form field to understand what information should go there.\n\n"
-#         "Field name: '{field_name}'\n"
-#         "Nearby text on the form: '{text}'\n\n"
-#         "Based on the context, what type of information should this field contain?\n"
-#         "Return a short semantic label like 'full name', 'email', 'phone number', 'street address', 'move-in date', etc.\n"
-#         "Return only the label, no explanation:"
-#     )
-#     return llm.invoke(prompt.format(field_name=field_name, text=text)).strip().lower()
-
-# def fuzzy_match_keywords(label1, label2):
-#     """Enhanced matching using keyword overlap and fuzzy matching"""
-#     # Common synonyms and variations
-#     synonyms = {
-#         'address': ['street', 'addr', 'location'],
-#         'name': ['resident', 'tenant', 'applicant', 'client'],
-#         'phone': ['telephone', 'mobile', 'cell', 'number'],
-#         'email': ['e-mail', 'mail', 'electronic'],
-#         'date': ['move-in', 'movein', 'start', 'lease'],
-#         'suite': ['unit', 'apt', 'apartment', 'room']
-#     }
-    
-#     # Split labels into words
-#     words1 = set(label1.lower().split())
-#     words2 = set(label2.lower().split())
-    
-#     # Direct word overlap
-#     overlap = len(words1.intersection(words2))
-#     if overlap > 0:
-#         return 0.8 + (overlap * 0.1)
-    
-#     # Check synonyms
-#     for word1 in words1:
-#         for word2 in words2:
-#             for key, syn_list in synonyms.items():
-#                 if (word1 == key and word2 in syn_list) or (word2 == key and word1 in syn_list):
-#                     return 0.7
-#                 if word1 in syn_list and word2 in syn_list:
-#                     return 0.6
-    
-#     # Fallback to sequence matching
-#     return similarity(label1, label2)
-
-# def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
-#     doc = fitz.open(blank_pdf_path)
-#     blank_fields = []
-
-#     # Extract blank fields and generate AI labels for them
-#     print("🔍 Analyzing blank form fields...")
-#     for page_num, page in enumerate(doc):
-#         for w in page.widgets():
-#             nearby_text = page.get_textbox(w.rect + (-70, -70, 70, 70)).strip()
-            
-#             # Generate AI label for blank field
-#             ai_label = generate_blank_field_label(nearby_text, w.field_name)
-            
-#             blank_fields.append({
-#                 "field_name": w.field_name,
-#                 "original_text": nearby_text,
-#                 "ai_label": ai_label,
-#                 "page": page_num
-#             })
-#             print(f"  {w.field_name}: '{nearby_text}' → '{ai_label}'")
-
-#     matched = {}
-#     used_filled_indices = set()
-
-#     print("\n🎯 Matching fields...")
-    
-#     # Match each blank field to the best filled field
-#     for bf in blank_fields:
-#         best_score = 0
-#         best_value = ""
-#         best_filled_field = None
-#         best_idx = -1
-
-#         for i, ff in enumerate(filled_fields):
-#             if i in used_filled_indices:
-#                 continue
-            
-#             # Try matching with AI-generated label
-#             ai_score = fuzzy_match_keywords(bf["ai_label"], ff["label"])
-            
-#             # Also try matching with original text
-#             text_score = fuzzy_match_keywords(bf["original_text"], ff["label"])
-            
-#             # Use the better score
-#             score = max(ai_score, text_score)
-            
-#             if score > best_score:
-#                 best_score = score
-#                 best_value = ff["value"]
-#                 best_filled_field = ff
-#                 best_idx = i
-
-#         # Lower threshold and show matching details
-#         threshold = 0.25  # Reduced from 0.35
-#         if best_score > threshold:
-#             matched[bf["field_name"]] = best_value
-#             used_filled_indices.add(best_idx)
-#             print(f"  ✅ {bf['field_name']}: '{bf['ai_label']}' ← '{best_filled_field['label']}' (score: {best_score:.2f})")
-#         else:
-#             matched[bf["field_name"]] = ""
-#             print(f"  ❌ {bf['field_name']}: '{bf['ai_label']}' (no good match, best score: {best_score:.2f})")
-
-#     # Show unmatched filled fields
-#     unmatched_filled = [ff for i, ff in enumerate(filled_fields) if i not in used_filled_indices]
-#     if unmatched_filled:
-#         print(f"\n⚠️  Unmatched filled fields: {[ff['label'] + ': ' + ff['value'] for ff in unmatched_filled]}")
-
-#     return matched
-
-
 from difflib import SequenceMatcher
 import fitz
 from langchain_ollama import OllamaLLM
@@ -383,13 +103,14 @@ def categorize_extracted_data(filled_fields):
         'other': []
     }
     
-    print("🔍 Categorizing extracted data by type...")
+    print("Categorizing extracted data by type...")
     
     for field in filled_fields:
         value = field['value']
         label = field['label'].lower()
         
-        # Skip obvious company/template data
+        # Skip obvious company/template data 
+        #####################################needs to be updated################################################# *************************
         if any(skip_word in value.lower() for skip_word in ['provident', 'customerservice', 'pemi.com']):
             continue
         
@@ -422,7 +143,7 @@ def categorize_extracted_data(filled_fields):
         
         # Name detection
         elif validate_data_type(value, 'name'):
-            # Check if it's a full name (multiple words)
+            # Check if it's a full name 
             if len(value.split()) >= 2:
                 data_by_type['full_names'].append(field)
             else:
@@ -433,7 +154,7 @@ def categorize_extracted_data(filled_fields):
         if not categorized:
             data_by_type['other'].append(field)
     
-    # Print categorized data for debugging
+    # debugging
     for category, items in data_by_type.items():
         if items:
             print(f"  {category.upper()}:")
@@ -525,7 +246,7 @@ def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
     data_by_type = categorize_extracted_data(filled_fields)
     used_indices = set()
     
-    print("\n🎯 Smart matching process...")
+    print("\n Smart matching process...")
     
     # Process each field in the blank form
     for page in doc:
@@ -542,7 +263,7 @@ def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
             )
             
             # Assign the best match if score is reasonable
-            threshold = 0.15  # Lower threshold for better coverage
+            threshold = 0.15 
             if best_match and best_score > threshold:
                 # Determine extraction method
                 search_strategy = {
@@ -578,6 +299,6 @@ def match_filled_to_blank_fields(filled_fields, blank_pdf_path):
                 unused_data.append(f"{item['label']}: {item['value']}")
     
     if unused_data:
-        print(f"\n⚠️  Unused source data: {unused_data}")
+        print(f"\n Unused source data: {unused_data}")
     
     return matched
